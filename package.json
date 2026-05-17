@@ -1,0 +1,15 @@
+{
+  "name": "patchpilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered PR code reviewer and bug fixer MVP.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

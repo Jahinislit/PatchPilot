@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PatchPilot</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">AI Code Review Assistant</p>
+          <h1>PatchPilot</h1>
+          <p class="subcopy">Review pull requests with risk scoring, file-level findings, test suggestions, and exportable patch guidance.</p>
+        </div>
+        <div class="hero-stats">
+          <span>GitHub PR Import</span>
+          <span>AI Review Mode</span>
+          <span>Review Exports</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel history-panel">
+          <div class="panel-header">
+            <div>
+              <h2>History</h2>
+              <p>Latest saved reviews.</p>
+            </div>
+            <button id="refreshHistoryButton" type="button" class="secondary">Refresh</button>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+
+        <div class="panel editor-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Review Input</h2>
+              <p>Paste a GitHub PR URL or a unified diff.</p>
+            </div>
+            <div class="header-actions">
+              <label>
+                Review mode
+                <select id="providerSelect">
+                  <option value="local">Local</option>
+                  <option value="openai">OpenAI</option>
+                </select>
+              </label>
+              <button id="sampleButton" type="button">Load Sample</button>
+            </div>
+          </div>
+          <div class="input-tabs" aria-label="Review input options">
+            <span class="input-tab active">GitHub PR</span>
+            <span class="input-tab">Raw Diff</span>
+            <span class="input-tab">Context</span>
+          </div>
+          <div class="url-row">
+            <input id="prUrlInput" type="url" placeholder="https://github.com/owner/repo/pull/123" />
+            <button id="reviewPrButton" type="button">Review PR URL</button>
+          </div>
+          <textarea
+            id="contextInput"
+            class="context-input"
+            spellcheck="false"
+            placeholder="Optional repo context: tech stack, changed feature, architecture notes, known risk areas..."
+          ></textarea>
+          <textarea id="diffInput" spellcheck="false" placeholder="Paste unified diff here..."></textarea>
+          <div class="actions">
+            <button id="reviewButton" type="button">Review Diff</button>
+            <button id="clearButton" type="button" class="secondary">Clear</button>
+          </div>
+        </div>
+
+        <div class="panel results-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Review Output</h2>
+              <p>Structured findings generated from the changed lines.</p>
+            </div>
+            <div class="result-tools">
+              <div class="badges">
+                <span id="modeBadge" class="risk-badge">Local</span>
+                <span id="riskBadge" class="risk-badge">Idle</span>
+              </div>
+              <div class="artifact-actions">
+                <button id="copyMarkdownButton" type="button" class="secondary">Copy Markdown</button>
+                <button id="copyCommentsButton" type="button" class="secondary">Copy Comments</button>
+                <button id="downloadPatchButton" type="button" class="secondary">Patch Plan</button>
+                <button id="downloadGeneratedPatchButton" type="button" class="secondary">Generated Patch</button>
+              </div>
+            </div>
+          </div>
+          <div id="summary" class="summary empty">Run a review to see the PR summary.</div>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span class="metric-label">Risk Score</span>
+              <strong id="metricRisk">-</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Findings</span>
+              <strong id="metricFindings">-</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Tests</span>
+              <strong id="metricTests">-</strong>
+            </div>
+          </div>
+          <div class="filter-row" aria-label="Filter findings by severity">
+            <button class="filter-chip active" type="button" data-filter="all">All</button>
+            <button class="filter-chip" type="button" data-filter="critical">Critical</button>
+            <button class="filter-chip" type="button" data-filter="high">High</button>
+            <button class="filter-chip" type="button" data-filter="medium">Medium</button>
+            <button class="filter-chip" type="button" data-filter="low">Low</button>
+          </div>
+          <div id="findings" class="findings"></div>
+          <div class="two-column">
+            <div>
+              <h3>Suggested Tests</h3>
+              <ul id="testsList"></ul>
+            </div>
+            <div>
+              <h3>Patch Hints</h3>
+              <ul id="patchList"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
