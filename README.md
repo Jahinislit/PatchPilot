@@ -1,108 +1,202 @@
 # PatchPilot
 
-PatchPilot is an AI-powered code review and bug-fixing assistant for pull request diffs.
+PatchPilot is an AI-powered pull request review assistant that analyzes GitHub PR diffs, detects potential bugs and security risks, ranks findings by severity, and generates structured developer review feedback.
 
-The MVP accepts a GitHub PR URL or unified diff, analyzes changed files, produces structured review findings, suggests tests, generates patch guidance, and exports PR-ready review artifacts. It ships with a deterministic local reviewer and an optional OpenAI reviewer behind the same review contract.
+The platform combines deterministic rule-based analysis with optional OpenAI-powered review pipelines to provide reliable, production-oriented code review workflows. PatchPilot supports unified diff analysis, GitHub PR imports, Markdown export, GitHub-style review comments, review replay, and patch-plan generation through a lightweight developer dashboard.
 
+---
 
+## Live Demo
 
-## Run
+https://patchpilot-production-e33f.up.railway.app/
+
+---
+
+## Features
+
+- GitHub PR diff analysis
+- Unified diff parsing and review
+- AI-powered review generation
+- Deterministic fallback reviewer
+- Severity-ranked findings
+- Suggested test generation
+- Markdown review export
+- GitHub-style inline review comments
+- Patch-plan generation workflows
+- Review history replay
+- Dockerized local development setup
+- Cloud deployment on Railway
+- Lightweight browser dashboard
+
+---
+
+## Tech Stack
+
+### Backend
+- Node.js
+- Native HTTP Server
+- JavaScript (ES Modules)
+
+### AI & Analysis
+- OpenAI API
+- Deterministic Review Engine
+- Diff Parsing Pipeline
+
+### Infrastructure & Tooling
+- Docker
+- Docker Compose
+- Railway
+- GitHub API
+- Environment-based configuration
+
+---
+
+## Architecture
+
+```text
+Browser Dashboard
+        |
+Node HTTP API
+        |
+Review Service Pipeline
+        |
+ ├── Diff Parser
+ ├── Deterministic Reviewer
+ ├── OpenAI Reviewer
+ ├── Severity Ranking
+ └── Artifact Generator
+        |
+History Store
+        |
+Markdown Reports / GitHub Comments / Patch Plans
+```
+
+---
+
+## Local Development
+
+### Install Dependencies
 
 ```bash
 npm install
+```
+
+### Start Development Server
+
+```bash
 npm start
 ```
 
-Then open:
+Application runs at:
 
 ```text
 http://localhost:4173
 ```
 
-## Optional AI Mode
+---
 
-PatchPilot works without an API key in local mode.
+## Docker Setup
 
-To enable OpenAI mode:
-
-```bash
-$env:OPENAI_API_KEY="your_api_key"
-$env:PATCHPILOT_PROVIDER="openai"
-npm start
-```
-
-Optional model override:
+### Build and Run
 
 ```bash
-$env:OPENAI_MODEL="gpt-5.1"
+docker compose up --build
 ```
 
-The browser UI also has a review mode selector. If OpenAI mode is selected but no API key is set, PatchPilot falls back to the local deterministic reviewer.
+Application runs at:
 
-## Optional GitHub Token
+```text
+http://localhost:4173
+```
 
-Public PR diff import works without a token. To increase rate limits or prepare for private repositories later:
+### Stop Containers
 
 ```bash
-$env:GITHUB_TOKEN="your_github_token"
-npm start
+docker compose down
 ```
 
-## Test
+---
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+PORT=4173
+PATCHPILOT_PROVIDER=openai
+OPENAI_MODEL=gpt-5.1
+GITHUB_TOKEN=your_github_token
+```
+
+---
+
+## AI Review Modes
+
+### Local Deterministic Reviewer
+- Runs without API keys
+- Fast rule-based analysis
+- Reliable fallback behavior
+
+### OpenAI Review Pipeline
+- AI-assisted code review
+- Context-aware findings
+- Structured review generation
+
+If OpenAI mode is selected without an API key, PatchPilot automatically falls back to the deterministic reviewer.
+
+---
+
+## Testing
+
+Run the test suite:
 
 ```bash
 npm test
 ```
 
-## Demo Flow
+---
 
-1. Click `Load Sample`.
-2. Keep review mode as `Local`.
-3. Click `Review Diff`.
-4. Open a saved item from `History`.
-5. Click `Copy Markdown`, `Copy Comments`, or `Patch Plan`.
-6. Optional: paste a public GitHub PR URL and click `Review PR URL`.
+## Demo Workflow
 
-## MVP Features
+1. Load a sample diff or import a GitHub PR URL
+2. Select review mode (`Local` or `OpenAI`)
+3. Run analysis
+4. Review generated findings and severity rankings
+5. Export Markdown reports or GitHub-style comments
+6. Replay saved reviews from history
 
-- Paste a GitHub PR URL and fetch its `.diff`
-- Paste a unified diff
-- Parse changed files and added lines
-- Accept optional repository context for better AI review prompts
-- Review through local deterministic rules or OpenAI mode
-- Save review history locally
-- Generate structured findings
-- Rank issues by severity
-- Suggest tests
-- Produce a PR-style review summary
-- Export Markdown review reports
-- Export GitHub-style file comments
-- Download safe patch plans
-- Download generated `.patch` files for safe deterministic fixes
-- Browser dashboard with sample diff
+---
 
-## Architecture
+## Project Structure
 
 ```text
-Browser UI
-  |
-Node HTTP API
-  |
-Review Service
-  |-- Deterministic Reviewer
-  |-- OpenAI Reviewer
-  |
-History Store
-  |
-Artifacts: Markdown, GitHub comments, patch plan
+PATCHPILOT/
+├── data/                  # Local review persistence
+├── docs/                  # Architecture and documentation
+├── public/                # Browser dashboard UI
+├── src/                   # Review pipeline and backend services
+├── test/                  # Test suite
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+└── README.md
 ```
 
+---
 
+## Roadmap
 
-## Future Milestones
+- PostgreSQL/Supabase persistence
+- GitHub OAuth & GitHub App integration
+- Repository context retrieval
+- Streaming review generation
+- CI/CD pipelines
+- Team workspaces
+- Advanced security rule engine
 
-1. Store review history in SQLite/PostgreSQL.
-2. Add GitHub App auth for private repositories and real PR comments.
-3. Add repo context retrieval for multi-file reasoning.
-4. Expand code-edit patch generation with AI and human approval.
-5. Deploy frontend/backend and add screenshots to the README.
+---
+
+## Vision
+
+PatchPilot aims to evolve into a developer productivity platform that combines deterministic static analysis with AI-assisted review pipelines to streamline pull request workflows, debugging, and code quality assurance.
